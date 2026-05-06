@@ -2,22 +2,13 @@
    admin.js — Admin-Dashboard Frontend-Logik
    ===================================================== */
 
-const SESSION_KEY = "emma_admin_key";
-
 let adminKey = "";
 let rsvpData  = [];
 
 /* ── Init ──────────────────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", () => {
-  const saved = sessionStorage.getItem(SESSION_KEY);
-  if (saved) {
-    adminKey = saved;
-    showDashboard();
-  } else {
-    document.getElementById("loginScreen").style.display = "flex";
-  }
+  showDashboard();
 
-  document.getElementById("loginForm").addEventListener("submit", handleLogin);
   document.getElementById("btnLogout").addEventListener("click", logout);
 
   // Tabs
@@ -46,44 +37,12 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ── Auth ──────────────────────────────────────────────────────── */
-async function handleLogin(e) {
-  e.preventDefault();
-  const key = document.getElementById("adminKey").value.trim();
-  const btn = document.getElementById("loginBtn");
-  const err = document.getElementById("loginError");
-
-  if (!key) return;
-  btn.disabled   = true;
-  btn.textContent = "…";
-  err.textContent = "";
-
-  try {
-    const res = await api("rsvps", "GET", null, key);
-    if (res.status === 401) { err.textContent = "Falscher Schlüssel."; return; }
-    if (!res.ok) throw new Error();
-    adminKey = key;
-    sessionStorage.setItem(SESSION_KEY, key);
-    showDashboard();
-  } catch {
-    err.textContent = "Verbindungsfehler.";
-  } finally {
-    btn.disabled    = false;
-    btn.textContent = "Anmelden";
-  }
-}
-
 function logout() {
-  sessionStorage.removeItem(SESSION_KEY);
-  adminKey = "";
-  document.getElementById("dashboard").hidden      = true;
-  document.getElementById("loginScreen").style.display = "flex";
-  document.getElementById("adminKey").value = "";
+  window.location.reload();
 }
 
 /* ── Dashboard ─────────────────────────────────────────────────── */
 function showDashboard() {
-  document.getElementById("loginScreen").style.display = "none";
-  document.getElementById("dashboard").hidden = false;
   loadRsvps();
   loadPolls();
   loadSettings();

@@ -29,7 +29,7 @@ export async function onRequest(context) {
   const key    = url.searchParams.get("key");
   const action = url.searchParams.get("action");
 
-  if (!env.ADMIN_KEY || key !== env.ADMIN_KEY) {
+  if (env.ADMIN_KEY && key !== env.ADMIN_KEY) {
     return json({ error: "Nicht autorisiert" }, 401);
   }
 
