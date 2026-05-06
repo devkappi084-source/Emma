@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Emmas Taufe – Informationen, Anmeldung und Fotogalerie">
+  <title>Emmas Taufe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-brand">Emma</a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#info">Informationen</a></li>
+        <li><a href="#rsvp">Anmeldung</a></li>
+        <li><a href="#abstimmung">Abstimmung</a></li>
+        <li><a href="#galerie">Galerie</a></li>
+      </ul>
+      <button class="nav-toggle" id="navToggle" aria-label="Menü öffnen">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+      <p class="hero-pre">Herzlich willkommen zur</p>
+      <h1 class="hero-title">Taufe von Emma</h1>
+      <div class="hero-ornament">✦ ✦ ✦</div>
+      <p class="hero-verse">„Ich habe dich bei deinem Namen gerufen. Du bist mein."</p>
+      <p class="hero-verse-source">Jesaja 43,1</p>
+      <div class="countdown-wrapper">
+        <div id="countdown" class="countdown">
+          <div class="countdown-item">
+            <span class="countdown-number" id="days">00</span>
+            <span class="countdown-label">Tage</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="hours">00</span>
+            <span class="countdown-label">Stunden</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="minutes">00</span>
+            <span class="countdown-label">Minuten</span>
+          </div>
+          <div class="countdown-sep">:</div>
+          <div class="countdown-item">
+            <span class="countdown-number" id="seconds">00</span>
+            <span class="countdown-label">Sekunden</span>
+          </div>
+        </div>
+        <div id="countdownPast" class="countdown-past" style="display:none">
+          Wir feiern Emmas Tauftag ✦
+        </div>
+      </div>
+    </div>
+    <a href="#info" class="scroll-down" aria-label="Nach unten scrollen">
+      <span class="scroll-arrow">↓</span>
+    </a>
+  </section>
+
+  <!-- Information Section -->
+  <section id="info" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Informationen</h2>
+        <p class="section-subtitle">Alle wichtigen Details auf einen Blick</p>
+      </div>
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-icon">📅</div>
+          <h3 class="info-card-title">Datum</h3>
+          <p id="info-date">Sonntag, 15. Juni 2025</p>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">⛪</div>
+          <h3 class="info-card-title">Taufgottesdienst</h3>
+          <p id="info-church-time">10:00 Uhr</p>
+          <p id="info-church-name">Evangelische Kirche</p>
+          <p id="info-church-address">Kirchstraße 1, Musterstadt</p>
+          <a id="info-church-maps" href="#" class="info-link" target="_blank" rel="noopener">Anfahrt →</a>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">🥂</div>
+          <h3 class="info-card-title">Tauffeier</h3>
+          <p id="info-party-time">12:30 Uhr</p>
+          <p id="info-party-name">Restaurant Gartenhaus</p>
+          <p id="info-party-address">Gartenweg 15, Musterstadt</p>
+          <a id="info-party-maps" href="#" class="info-link" target="_blank" rel="noopener">Anfahrt →</a>
+        </div>
+        <div class="info-card">
+          <div class="info-icon">👗</div>
+          <h3 class="info-card-title">Kleidung</h3>
+          <p id="info-dresscode">Festlich & sommerlich</p>
+        </div>
+      </div>
+      <div class="info-note">
+        <p id="info-deadline-text">
+          Bitte meldet euch bis zum <strong>1. Juni 2025</strong> über das untenstehende Formular an.
+          Wir freuen uns sehr auf euren Besuch!
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RSVP Section -->
+  <section id="rsvp" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Anmeldung</h2>
+        <p class="section-subtitle">Teilt uns bitte mit, ob ihr dabei seid</p>
+      </div>
+      <div class="form-wrapper">
+        <form id="rsvpForm" class="form" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="rsvp-name">Name *</label>
+              <input type="text" id="rsvp-name" name="name" required placeholder="Vor- und Nachname" autocomplete="name">
+              <span class="field-error" id="error-name"></span>
+            </div>
+            <div class="form-group">
+              <label for="rsvp-email">E-Mail</label>
+              <input type="email" id="rsvp-email" name="email" placeholder="eure@email.de" autocomplete="email">
+              <span class="field-error" id="error-email"></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Teilnahme *</label>
+            <div class="radio-group">
+              <label class="radio-card">
+                <input type="radio" name="attendance" value="yes" required>
+                <span class="radio-content">
+                  <span class="radio-icon">🎉</span>
+                  <span class="radio-text">Ja, ich freue mich dabei zu sein!</span>
+                </span>
+              </label>
+              <label class="radio-card">
+                <input type="radio" name="attendance" value="no">
+                <span class="radio-content">
+                  <span class="radio-icon">😔</span>
+                  <span class="radio-text">Leider kann ich nicht kommen</span>
+                </span>
+              </label>
+            </div>
+            <span class="field-error" id="error-attendance"></span>
+          </div>
+
+          <div id="attendanceDetails" class="attendance-details" style="display:none">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="rsvp-guests">Anzahl Personen *</label>
+                <select id="rsvp-guests" name="guests">
+                  <option value="1">1 Person</option>
+                  <option value="2">2 Personen</option>
+                  <option value="3">3 Personen</option>
+                  <option value="4">4 Personen</option>
+                  <option value="5+">5 oder mehr Personen</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="rsvp-allergies">Allergien / Unverträglichkeiten</label>
+                <input type="text" id="rsvp-allergies" name="allergies" placeholder="z.B. Laktose, Nüsse…">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Menüwahl</label>
+              <div class="menu-grid">
+                <label class="menu-card-label">
+                  <input type="radio" name="menu" value="Fleisch">
+                  <span class="menu-card">
+                    <span class="menu-emoji">🥩</span>
+                    <span class="menu-title">Fleisch</span>
+                    <span class="menu-desc">Hähnchenbrust mit Gemüse & Kartoffeln</span>
+                  </span>
+                </label>
+                <label class="menu-card-label">
+                  <input type="radio" name="menu" value="Fisch">
+                  <span class="menu-card">
+                    <span class="menu-emoji">🐟</span>
+                    <span class="menu-title">Fisch</span>
+                    <span class="menu-desc">Lachsfilet mit Dill-Soße & Reis</span>
+                  </span>
+                </label>
+                <label class="menu-card-label">
+                  <input type="radio" name="menu" value="Vegetarisch">
+                  <span class="menu-card">
+                    <span class="menu-emoji">🥗</span>
+                    <span class="menu-title">Vegetarisch</span>
+                    <span class="menu-desc">Gemüse-Risotto mit Parmesan</span>
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="rsvp-message">Glückwunsch / Nachricht</label>
+            <textarea id="rsvp-message" name="message" rows="4" placeholder="Ein lieber Gruß für Emma und ihre Familie…"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" id="rsvpSubmitBtn">
+            <span class="btn-text">Anmeldung absenden</span>
+            <span class="btn-spinner" style="display:none">⏳</span>
+          </button>
+        </form>
+
+        <div class="form-success" id="rsvpSuccess" style="display:none">
+          <div class="success-circle">✓</div>
+          <h3>Vielen Dank!</h3>
+          <p id="rsvpSuccessMsg">Deine Anmeldung wurde übermittelt. Wir freuen uns auf dich!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Voting Section -->
+  <section id="abstimmung" class="section">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Abstimmung</h2>
+        <p class="section-subtitle">Macht mit bei unserer kleinen Umfrage</p>
+      </div>
+      <div class="polls-grid" id="pollsContainer">
+        <!-- Polls werden per JavaScript aus config.js geladen -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Photo Gallery Section -->
+  <section id="galerie" class="section section-alt">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Fotogalerie</h2>
+        <p class="section-subtitle">Erinnerungen an Emmas besonderen Tag</p>
+      </div>
+
+      <!-- Vor dem Event -->
+      <div class="gallery-placeholder" id="gallerySoon">
+        <div class="gallery-placeholder-icon">📷</div>
+        <h3>Fotos folgen nach der Taufe</h3>
+        <p>Hier werden nach dem Fest alle Fotos zum Ansehen und Herunterladen bereitgestellt.</p>
+      </div>
+
+      <!-- Nach dem Event -->
+      <div id="galleryActive" style="display:none">
+        <div class="gallery-toolbar">
+          <span class="gallery-count" id="galleryCount"></span>
+          <button class="btn btn-secondary" id="btnDownloadAll">⬇ Alle herunterladen</button>
+        </div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p class="footer-name">Emma</p>
+      <p class="footer-date" id="footer-date">Getauft am 15. Juni 2025</p>
+      <p class="footer-love">Mit Liebe erstellt für Familie &amp; Freunde ♥</p>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-modal="true" role="dialog" aria-label="Foto-Ansicht">
+    <div class="lightbox-overlay" id="lightboxOverlay"></div>
+    <div class="lightbox-inner">
+      <button class="lightbox-btn lightbox-close" id="lightboxClose" aria-label="Schließen">✕</button>
+      <button class="lightbox-btn lightbox-prev" id="lightboxPrev" aria-label="Vorheriges Foto">❮</button>
+      <button class="lightbox-btn lightbox-next" id="lightboxNext" aria-label="Nächstes Foto">❯</button>
+      <div class="lightbox-media">
+        <img id="lightboxImg" src="" alt="" loading="lazy">
+      </div>
+      <div class="lightbox-footer">
+        <span class="lightbox-caption" id="lightboxCaption"></span>
+        <a class="btn btn-download" id="lightboxDownload" download>⬇ Herunterladen</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/gallery.js"></script>
+</body>
+</html>
