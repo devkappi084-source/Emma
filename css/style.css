@@ -4,18 +4,21 @@
 
 /* ---------- Custom Properties ---------- */
 :root {
-  --gold:        #C9A96E;
-  --gold-light:  #E8D5B0;
-  --gold-dark:   #9A7440;
-  --cream:       #FAF7F2;
-  --warm-white:  #FFFDF9;
-  --peach:       #F5E6D8;
-  --rose:        #E8C4B8;
-  --text:        #2C2416;
-  --text-muted:  #7A6952;
-  --text-light:  #A89880;
-  --border:      #E8DDD0;
-  --shadow:      rgba(44, 36, 22, 0.1);
+  --gold:        #6B9EC7;
+  --gold-light:  #BFDBF0;
+  --gold-dark:   #3D6E94;
+  --blue:        #6B9EC7;
+  --blue-light:  #BFDBF0;
+  --blue-dark:   #3D6E94;
+  --cream:       #F5F8FB;
+  --warm-white:  #FAFCFF;
+  --peach:       #E8F2FA;
+  --rose:        #C2D9EA;
+  --text:        #1A2F45;
+  --text-muted:  #5A7A99;
+  --text-light:  #8AAABF;
+  --border:      #C9DFF0;
+  --shadow:      rgba(26, 47, 69, 0.1);
   --radius:      12px;
   --radius-lg:   20px;
   --transition:  0.25s ease;
@@ -122,7 +125,7 @@ h1, h2, h3 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(160deg, #2C2416 0%, #4A3728 45%, #6B4F38 100%);
+  background: linear-gradient(160deg, #0D2137 0%, #1A3F60 45%, #2A5F8A 100%);
   overflow: hidden;
   padding: 100px 1.5rem 80px;
   text-align: center;
@@ -133,8 +136,8 @@ h1, h2, h3 {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at 30% 30%, rgba(201,169,110,0.25) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 70%, rgba(232,197,184,0.15) 0%, transparent 60%);
+    radial-gradient(ellipse at 30% 30%, rgba(107,158,199,0.3) 0%, transparent 60%),
+    radial-gradient(ellipse at 70% 70%, rgba(191,219,240,0.2) 0%, transparent 60%);
   pointer-events: none;
 }
 
@@ -759,7 +762,7 @@ input::placeholder, textarea::placeholder { color: var(--text-light); }
 
 /* ---------- Footer ---------- */
 footer {
-  background: var(--text);
+  background: #0D2137;
   color: rgba(255,255,255,0.7);
   text-align: center;
   padding: 3rem 1.5rem;

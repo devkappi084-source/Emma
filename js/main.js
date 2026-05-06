@@ -167,7 +167,6 @@ function initRsvp() {
 
     const data = {
       name:       form.elements["name"].value.trim(),
-      email:      form.elements["email"].value.trim(),
       attendance: form.elements["attendance"].value,
       guests:     form.elements["guests"]?.value || "1",
       menu:       form.elements["menu"]?.value || "",
@@ -210,15 +209,6 @@ function validateRsvpForm(form) {
     valid = false;
   } else {
     nameErr.textContent = "";
-  }
-
-  const email = form.elements["email"].value.trim();
-  const emailErr = document.getElementById("error-email");
-  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    emailErr.textContent = "Ungültige E-Mail-Adresse.";
-    valid = false;
-  } else {
-    emailErr.textContent = "";
   }
 
   const attendanceErr = document.getElementById("error-attendance");
