@@ -35,14 +35,20 @@ js/gallery.js  → reads CONFIG.gallery; handles grid rendering and lightbox
 All three scripts run on `DOMContentLoaded`. `main.js` calls `initPolls()` which dynamically creates `.poll-card` elements *after* `initFadeIn()` has already run, so poll cards add the `fade-in` class manually in `buildPollCard()` — the IntersectionObserver from `initFadeIn()` does not observe them.
 
 ### Cloudflare Pages Functions (`functions/api/`)
-Both functions use the KV binding named `BAPTISM_KV` (must be created in the Cloudflare dashboard and bound to the Pages project).
+All functions use the KV binding named `BAPTISM_KV`. Auth for admin routes is via query param `?key=<ADMIN_KEY>` (env var `ADMIN_KEY`).
 
 | File | Route | Notes |
 |---|---|---|
 | `rsvp.js` | `POST /api/rsvp` | Saves entry under key `rsvp:<timestamp>:<random>` |
-| `rsvp.js` | `GET /api/rsvp?key=ADMIN_KEY` | Returns all RSVPs; requires `ADMIN_KEY` env var |
 | `votes.js` | `POST /api/votes` | Increments count under key `poll:<pollId>:results` |
 | `votes.js` | `GET /api/votes?pollId=X` | Returns `{ counts, total }` |
+| `admin.js` | `GET /api/admin?action=rsvps` | All RSVPs + summary |
+| `admin.js` | `GET /api/admin?action=polls` | All poll results |
+| `admin.js` | `PATCH /api/admin?action=rsvp&id=<key>` | Edit RSVP |
+| `admin.js` | `DELETE /api/admin?action=rsvp&id=<key>` | Delete RSVP |
+| `admin.js` | `DELETE /api/admin?action=poll&pollId=X` | Reset poll |
+| `admin.js` | `GET/PUT /api/admin?action=config` | Read/write config overrides |
+| `config.js` | `GET /api/config` | Public config overrides (no auth) |
 
 Vote deduplication is client-side only via `localStorage` (`voted_<pollId>`).
 
@@ -71,6 +77,15 @@ The gallery section shows a placeholder until `CONFIG.gallery.active` is `true` 
 1. Upload images to `images/gallery/`
 2. Add entries to `CONFIG.gallery.photos`
 3. Set `CONFIG.gallery.active = true`
+
+### Config overrides / live editing
+`main.js` fetches `GET /api/config` on load and shallow-merges the result into `window.CONFIG`. This lets the admin update event details (names, dates, locations) without redeploying. Overrides are stored under KV key `config:overrides` as JSON.
+
+### Caching (`_headers`)
+Gallery images (`/images/gallery/*`) are served with `Cache-Control: immutable` (1 year). CSS and JS files get 1 day. Add a cache-busting query string or rename files when deploying updates to those assets.
+
+### CSS: `[hidden]` vs. `display` class rules
+Any element that uses both the HTML `hidden` attribute and a CSS class that sets `display` to a non-`none` value will remain visible, because author stylesheets outrank the UA `[hidden] { display: none }` rule at equal specificity. Fix pattern: add `.my-class[hidden] { display: none; }` alongside the class rule (as done for `.modal-backdrop` in `admin.css`).
 
 ### Strings / encoding
 Strings containing German quotation marks (`„…"`) must use single-quote JS string delimiters or escape the inner `"` — mixing double-quote delimiters with `"` (U+201C) causes a syntax error that silently prevents `window.CONFIG` from being defined and breaks all dynamic rendering.
