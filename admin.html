@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Emmas Taufe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- ── Login ────────────────────────────────────────────────── -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <p class="login-brand"><em>Emma</em></p>
+      <h1 class="login-title">Admin</h1>
+      <p class="login-sub">Taufe-Verwaltung</p>
+      <form id="loginForm" novalidate>
+        <input id="adminKey" type="password" placeholder="Admin-Schlüssel" autocomplete="current-password">
+        <button type="submit" id="loginBtn">Anmelden</button>
+        <p class="login-error" id="loginError"></p>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Dashboard ─────────────────────────────────────────────── -->
+  <div id="dashboard" hidden>
+
+    <header class="adm-header">
+      <div class="adm-header-inner">
+        <div class="adm-header-left">
+          <span class="adm-brand"><em>Emma</em></span>
+          <span class="adm-header-title">Admin</span>
+        </div>
+        <button id="btnLogout" class="btn-ghost">Abmelden</button>
+      </div>
+    </header>
+
+    <nav class="adm-tabs" role="tablist">
+      <button class="tab active" data-tab="rsvp"     role="tab">Anmeldungen</button>
+      <button class="tab"        data-tab="polls"    role="tab">Abstimmungen</button>
+      <button class="tab"        data-tab="settings" role="tab">Einstellungen</button>
+    </nav>
+
+    <main class="adm-main">
+
+      <!-- ── Tab: Anmeldungen ──────────────────────────────────── -->
+      <section id="tab-rsvp" class="tab-panel active">
+        <div class="panel-toolbar">
+          <h2>Anmeldungen</h2>
+          <div class="toolbar-actions">
+            <button class="btn-secondary" id="btnRefreshRsvp">↻ Aktualisieren</button>
+            <button class="btn-primary"   id="btnExportCsv">⬇ CSV exportieren</button>
+          </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="summary-row" id="rsvpSummary"></div>
+
+        <!-- Table -->
+        <div class="table-wrap">
+          <table id="rsvpTable">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Teilnahme</th>
+                <th>Personen</th>
+                <th>Menü</th>
+                <th>Allergien</th>
+                <th>Nachricht</th>
+                <th>Datum</th>
+                <th class="col-actions">Aktionen</th>
+              </tr>
+            </thead>
+            <tbody id="rsvpBody">
+              <tr><td colspan="8" class="loading">Wird geladen…</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ── Tab: Abstimmungen ─────────────────────────────────── -->
+      <section id="tab-polls" class="tab-panel" hidden>
+        <div class="panel-toolbar">
+          <h2>Abstimmungen</h2>
+          <button class="btn-secondary" id="btnRefreshPolls">↻ Aktualisieren</button>
+        </div>
+        <div id="pollsContainer" class="polls-admin-grid"></div>
+      </section>
+
+      <!-- ── Tab: Einstellungen ────────────────────────────────── -->
+      <section id="tab-settings" class="tab-panel" hidden>
+        <div class="panel-toolbar">
+          <h2>Einstellungen</h2>
+          <p class="panel-note">Änderungen werden live auf der Webseite übernommen (ohne Neudeploy).</p>
+        </div>
+        <form id="settingsForm" class="settings-form" novalidate>
+
+          <fieldset class="fs">
+            <legend>Allgemein</legend>
+            <div class="field-row">
+              <div class="field">
+                <label for="s-babyName">Name des Kindes</label>
+                <input id="s-babyName" name="babyName" type="text">
+              </div>
+              <div class="field">
+                <label for="s-eventDate">Datum &amp; Uhrzeit der Taufe</label>
+                <input id="s-eventDate" name="eventDate" type="datetime-local">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field">
+                <label for="s-rsvpDeadline">Anmeldefrist (Freitext)</label>
+                <input id="s-rsvpDeadline" name="rsvpDeadline" type="text" placeholder="z.B. 1. Juni 2025">
+              </div>
+              <div class="field">
+                <label for="s-dresscode">Kleidung / Dresscode</label>
+                <input id="s-dresscode" name="dresscode" type="text">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Bibelvers</legend>
+            <div class="field-row">
+              <div class="field grow">
+                <label for="s-verseText">Vers-Text</label>
+                <input id="s-verseText" name="verseText" type="text">
+              </div>
+              <div class="field">
+                <label for="s-verseSource">Quelle</label>
+                <input id="s-verseSource" name="verseSource" type="text" placeholder="z.B. Jesaja 43,1">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Taufgottesdienst</legend>
+            <div class="field-row">
+              <div class="field">
+                <label for="s-churchTime">Uhrzeit</label>
+                <input id="s-churchTime" name="churchTime" type="text" placeholder="10:00 Uhr">
+              </div>
+              <div class="field grow">
+                <label for="s-churchName">Name / Kirche</label>
+                <input id="s-churchName" name="churchName" type="text">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field grow">
+                <label for="s-churchAddress">Adresse</label>
+                <input id="s-churchAddress" name="churchAddress" type="text">
+              </div>
+              <div class="field grow">
+                <label for="s-churchMaps">Google Maps URL</label>
+                <input id="s-churchMaps" name="churchMaps" type="url">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Tauffeier</legend>
+            <div class="field-row">
+              <div class="field">
+                <label for="s-partyTime">Uhrzeit</label>
+                <input id="s-partyTime" name="partyTime" type="text" placeholder="12:30 Uhr">
+              </div>
+              <div class="field grow">
+                <label for="s-partyName">Name / Location</label>
+                <input id="s-partyName" name="partyName" type="text">
+              </div>
+            </div>
+            <div class="field-row">
+              <div class="field grow">
+                <label for="s-partyAddress">Adresse</label>
+                <input id="s-partyAddress" name="partyAddress" type="text">
+              </div>
+              <div class="field grow">
+                <label for="s-partyMaps">Google Maps URL</label>
+                <input id="s-partyMaps" name="partyMaps" type="url">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset class="fs">
+            <legend>Fotogalerie</legend>
+            <label class="toggle-label">
+              <input id="s-galleryActive" name="galleryActive" type="checkbox">
+              <span class="toggle-text">Galerie aktivieren (Fotos anzeigen)</span>
+            </label>
+            <p class="field-hint">Erst aktivieren, nachdem Fotos in <code>images/gallery/</code> hochgeladen und in <code>js/config.js</code> eingetragen wurden.</p>
+          </fieldset>
+
+        </form>
+        <div class="settings-footer">
+          <button class="btn-primary"   id="btnSaveSettings">Speichern</button>
+          <button class="btn-secondary" id="btnResetSettings">Overrides löschen</button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ── Edit-Modal ─────────────────────────────────────────────── -->
+  <div id="editModal" class="modal-backdrop" hidden aria-modal="true" role="dialog">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalTitle">Anmeldung bearbeiten</h3>
+        <button class="modal-close" id="modalClose" aria-label="Schließen">✕</button>
+      </div>
+      <form id="editForm" class="edit-form" novalidate>
+        <input type="hidden" id="edit-id">
+        <div class="field-row">
+          <div class="field grow">
+            <label for="edit-name">Name</label>
+            <input id="edit-name" name="name" type="text" required>
+          </div>
+          <div class="field grow">
+            <label for="edit-email">E-Mail</label>
+            <input id="edit-email" name="email" type="email">
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="edit-attendance">Teilnahme</label>
+            <select id="edit-attendance" name="attendance">
+              <option value="yes">Ja ✓</option>
+              <option value="no">Nein ✗</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="edit-guests">Personen</label>
+            <select id="edit-guests" name="guests">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5+">5+</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="edit-menu">Menü</label>
+            <select id="edit-menu" name="menu">
+              <option value="">—</option>
+              <option value="Fleisch">Fleisch</option>
+              <option value="Fisch">Fisch</option>
+              <option value="Vegetarisch">Vegetarisch</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="edit-allergies">Allergien</label>
+          <input id="edit-allergies" name="allergies" type="text">
+        </div>
+        <div class="field">
+          <label for="edit-message">Nachricht</label>
+          <textarea id="edit-message" name="message" rows="3"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-secondary" id="modalCancel">Abbrechen</button>
+          <button type="submit" class="btn-primary">Speichern</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ── Confirm Modal ─────────────────────────────────────────── -->
+  <div id="confirmModal" class="modal-backdrop" hidden aria-modal="true" role="dialog">
+    <div class="modal-card modal-confirm">
+      <div class="modal-header">
+        <h3 id="confirmTitle">Bestätigung</h3>
+      </div>
+      <p id="confirmMsg" class="confirm-msg"></p>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="confirmNo">Abbrechen</button>
+        <button class="btn-danger"    id="confirmYes">Löschen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>

@@ -2,7 +2,8 @@
    main.js — Navigation, Countdown, RSVP, Polls
    ===================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadConfigOverrides();   // KV-Overrides aus Admin-Seite laden
   applyConfig();
   initNavbar();
   initCountdown();
@@ -10,6 +11,32 @@ document.addEventListener("DOMContentLoaded", () => {
   initRsvp();
   initPolls();
 });
+
+/* ---------- Config-Overrides aus KV laden ---------- */
+async function loadConfigOverrides() {
+  try {
+    const res = await fetch("/api/config");
+    if (!res.ok) return;
+    const overrides = await res.json();
+    if (!overrides || typeof overrides !== "object") return;
+
+    // Flache Felder direkt überschreiben
+    const flat = ["babyName", "eventDate", "rsvpDeadline", "dresscode"];
+    flat.forEach(k => { if (overrides[k]) window.CONFIG[k] = overrides[k]; });
+
+    // Verschachtelte Objekte mergen
+    ["verse", "church", "party"].forEach(k => {
+      if (overrides[k] && typeof overrides[k] === "object") {
+        window.CONFIG[k] = { ...window.CONFIG[k], ...overrides[k] };
+      }
+    });
+
+    // Galerie-Status
+    if (overrides.gallery && typeof overrides.gallery.active === "boolean") {
+      window.CONFIG.gallery.active = overrides.gallery.active;
+    }
+  } catch { /* Lokal oder KV nicht verfügbar — stillschweigend ignorieren */ }
+}
 
 /* ---------- Config auf die Seite anwenden ---------- */
 function applyConfig() {

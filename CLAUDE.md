@@ -46,6 +46,26 @@ Both functions use the KV binding named `BAPTISM_KV` (must be created in the Clo
 
 Vote deduplication is client-side only via `localStorage` (`voted_<pollId>`).
 
+### Admin-Modus (`/admin.html`)
+Passwortgeschützte Verwaltungsseite (ADMIN_KEY via `sessionStorage`). Drei Tabs:
+
+| Tab | Funktion |
+|---|---|
+| **Anmeldungen** | Tabelle aller RSVPs, Zusammenfassung (Ja/Nein/Gäste/Menü), Inline-Bearbeitung via Modal, Löschen, CSV-Export |
+| **Abstimmungen** | Ergebnisse aller Polls aus KV, Zurücksetzen einzelner Abstimmungen |
+| **Einstellungen** | Alle CONFIG-Felder bearbeiten; gespeichert als `config:overrides` in KV |
+
+Config-Overrides werden beim Start der Hauptseite via `GET /api/config` geladen und über `window.CONFIG` gemergt — kein Neudeploy nötig.
+
+| File | Route | Notes |
+|---|---|---|
+| `admin.js` (Function) | `GET /api/admin?action=rsvps` | Alle RSVPs + Summary |
+| `admin.js` (Function) | `PATCH /api/admin?action=rsvp&id=<key>` | RSVP bearbeiten |
+| `admin.js` (Function) | `DELETE /api/admin?action=rsvp&id=<key>` | RSVP löschen |
+| `admin.js` (Function) | `DELETE /api/admin?action=poll&pollId=X` | Poll-Votes löschen |
+| `admin.js` (Function) | `GET/PUT /api/admin?action=config` | Config-Overrides lesen/schreiben |
+| `config.js` (Function) | `GET /api/config` | Öffentliche Config-Overrides (kein Auth) |
+
 ### Gallery activation
 The gallery section shows a placeholder until `CONFIG.gallery.active` is `true` **and** `CONFIG.gallery.photos` is non-empty. To publish photos after the event:
 1. Upload images to `images/gallery/`
