@@ -86,7 +86,8 @@ function initLightbox() {
 function openLightbox(index) {
   currentIndex = index;
   updateLightboxContent();
-  document.getElementById("lightbox").style.display = "flex";
+  const lb = document.getElementById("lightbox");
+  lb.style.display = "flex";
   document.body.style.overflow = "hidden";
 }
 

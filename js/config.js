@@ -4,7 +4,7 @@
  * Hier alle Texte, Datum, Orte und Fotos eintragen.
  */
 
-const CONFIG = {
+window.CONFIG = {
 
   /* ------ Allgemeine Informationen ------ */
   babyName: "Emma",
@@ -35,7 +35,7 @@ const CONFIG = {
 
   /* ------ Bibelvers im Hero ------ */
   verse: {
-    text:   "„Ich habe dich bei deinem Namen gerufen. Du bist mein."",
+    text:   '„Ich habe dich bei deinem Namen gerufen. Du bist mein.“',
     source: "Jesaja 43,1",
   },
 
