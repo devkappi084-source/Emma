@@ -39,32 +39,6 @@ window.CONFIG = {
     source: "Jesaja 43,1",
   },
 
-  /* ------ Abstimmungs-Fragen ------ */
-  polls: [
-    {
-      id:       "zukunft",
-      question: "Was wird Emma einmal werden?",
-      options: [
-        { emoji: "👩‍⚕️", label: "Ärztin" },
-        { emoji: "👩‍🎨", label: "Künstlerin" },
-        { emoji: "👩‍🔬", label: "Wissenschaftlerin" },
-        { emoji: "👩‍💼", label: "Unternehmerin" },
-        { emoji: "🏅",   label: "Sportlerin" },
-      ],
-    },
-    {
-      id:       "hobby",
-      question: "Welches Hobby wird Emma haben?",
-      options: [
-        { emoji: "🎵", label: "Musik" },
-        { emoji: "⚽", label: "Sport" },
-        { emoji: "📚", label: "Lesen" },
-        { emoji: "✈️", label: "Reisen" },
-        { emoji: "🍳", label: "Kochen" },
-      ],
-    },
-  ],
-
   /* ------ Fotogalerie ------ */
   gallery: {
     /*

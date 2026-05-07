@@ -1,15 +1,14 @@
 /* =====================================================
-   main.js — Navigation, Countdown, RSVP, Polls
+   main.js — Navigation, Countdown, RSVP
    ===================================================== */
 
 document.addEventListener("DOMContentLoaded", async () => {
-  await loadConfigOverrides();   // KV-Overrides aus Admin-Seite laden
+  await loadConfigOverrides();
   applyConfig();
   initNavbar();
   initCountdown();
   initFadeIn();
   initRsvp();
-  initPolls();
 });
 
 /* ---------- Config-Overrides aus KV laden ---------- */
