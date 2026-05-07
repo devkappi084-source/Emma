@@ -10,8 +10,25 @@
 </head>
 <body>
 
+  <!-- ── Login ──────────────────────────────────────────────────── -->
+  <div id="loginScreen">
+    <div class="login-card">
+      <span class="login-brand"><em>Emma</em></span>
+      <h1 class="login-title">Admin</h1>
+      <p class="login-sub">Bitte Admin-Passwort eingeben</p>
+      <form id="loginForm" novalidate>
+        <div class="field">
+          <label for="loginKey" class="sr-only">Passwort</label>
+          <input id="loginKey" type="password" placeholder="Admin-Passwort" autocomplete="current-password" required>
+        </div>
+        <p id="loginError" class="login-error" hidden>Falsches Passwort. Bitte erneut versuchen.</p>
+        <button type="submit" class="btn-primary login-btn">Anmelden</button>
+      </form>
+    </div>
+  </div>
+
   <!-- ── Dashboard ─────────────────────────────────────────────── -->
-  <div id="dashboard">
+  <div id="dashboard" hidden>
 
     <header class="adm-header">
       <div class="adm-header-inner">

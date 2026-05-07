@@ -7,7 +7,14 @@ let rsvpData  = [];
 
 /* ── Init ──────────────────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", () => {
-  showDashboard();
+  const stored = sessionStorage.getItem("adminKey");
+  if (stored) {
+    adminKey = stored;
+    showDashboard();
+  } else {
+    document.getElementById("loginScreen").hidden = false;
+    document.getElementById("loginForm").addEventListener("submit", handleLogin);
+  }
 
   document.getElementById("btnLogout").addEventListener("click", logout);
 
@@ -37,12 +44,33 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* ── Auth ──────────────────────────────────────────────────────── */
+async function handleLogin(e) {
+  e.preventDefault();
+  const key = document.getElementById("loginKey").value.trim();
+  if (!key) return;
+
+  // Key gegen API testen
+  const res = await fetch(`/api/admin?key=${encodeURIComponent(key)}&action=rsvps`);
+  if (res.status === 401) {
+    document.getElementById("loginError").hidden = false;
+    return;
+  }
+
+  sessionStorage.setItem("adminKey", key);
+  adminKey = key;
+  document.getElementById("loginError").hidden = true;
+  showDashboard();
+}
+
 function logout() {
+  sessionStorage.removeItem("adminKey");
   window.location.reload();
 }
 
 /* ── Dashboard ─────────────────────────────────────────────────── */
 function showDashboard() {
+  document.getElementById("loginScreen").hidden = true;
+  document.getElementById("dashboard").hidden = false;
   loadRsvps();
   loadPolls();
   loadSettings();

@@ -61,4 +61,38 @@ window.CONFIG = {
     ],
   },
 
+  /* ------ Abstimmungen ------ */
+  polls: [
+    {
+      id: "geschenk",
+      question: "Was wünscht ihr euch als Geschenk für Emma?",
+      options: [
+        { emoji: "📚", label: "Bücher & Bildung" },
+        { emoji: "🧸", label: "Spielzeug" },
+        { emoji: "💰", label: "Sparbuch / Geld" },
+        { emoji: "🎨", label: "Kreativ & Basteln" },
+      ],
+    },
+    {
+      id: "music",
+      question: "Welche Musik soll auf der Feier laufen?",
+      options: [
+        { emoji: "🎵", label: "Pop & Charts" },
+        { emoji: "🎸", label: "Rock & Oldies" },
+        { emoji: "🎻", label: "Klassik & Lounge" },
+        { emoji: "🪗", label: "Gemischt / Alles" },
+      ],
+    },
+    {
+      id: "dessert",
+      question: "Was soll es zum Nachtisch geben?",
+      options: [
+        { emoji: "🎂", label: "Torte" },
+        { emoji: "🍰", label: "Kuchen-Buffet" },
+        { emoji: "🍦", label: "Eis" },
+        { emoji: "🍓", label: "Obstsalat" },
+      ],
+    },
+  ],
+
 };
