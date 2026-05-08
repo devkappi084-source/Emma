@@ -1,0 +1,8 @@
+name = "emmataufe"
+pages_build_output_dir = "."
+compatibility_date = "2026-05-07"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "BAPTISM_KV"
+id = "09420f5948574cafbf125c11c8738702"

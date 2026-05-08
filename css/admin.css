@@ -43,6 +43,7 @@ em { font-style: italic; }
   background: linear-gradient(135deg, #2C2416 0%, #4A3728 100%);
   padding: 1.5rem;
 }
+#loginScreen[hidden] { display: none; }
 .login-card {
   background: var(--white);
   border-radius: 16px;
