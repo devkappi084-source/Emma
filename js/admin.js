@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Photos
   document.getElementById("btnRefreshPhotos").addEventListener("click", loadPhotos);
+  document.getElementById("btnScanNas").addEventListener("click", scanNas);
   initUploadZone();
 
   // Settings
@@ -447,6 +448,33 @@ function confirmDeletePhoto(filename) {
     if (res.ok) { showToast("Foto gelöscht."); loadPhotos(); }
     else          showToast("Fehler beim Löschen.");
   };
+}
+
+/* ── NAS scannen ─────────────────────────────────────────────────── */
+async function scanNas() {
+  const btn = document.getElementById("btnScanNas");
+  btn.disabled = true;
+  btn.textContent = "⟳ Scanne…";
+
+  const res = await fetch(
+    `/api/photos?key=${encodeURIComponent(adminKey)}&action=scan`
+  );
+  const data = await res.json().catch(() => ({}));
+
+  btn.disabled    = false;
+  btn.textContent = "⟳ NAS scannen";
+
+  if (!res.ok) {
+    showToast(data.error || "NAS-Scan fehlgeschlagen.");
+    return;
+  }
+
+  if (data.added > 0) {
+    showToast(`${data.added} neue${data.added !== 1 ? " Fotos" : "s Foto"} gefunden und eingetragen.`);
+    loadPhotos();
+  } else {
+    showToast(`Scan abgeschlossen — ${data.found} Foto${data.found !== 1 ? "s" : ""} gefunden, keine neuen.`);
+  }
 }
 
 /* ── Settings: laden ────────────────────────────────────────────── */
