@@ -7,6 +7,10 @@ compatibility_flags = ["nodejs_compat"]
 binding = "BAPTISM_KV"
 id = "09420f5948574cafbf125c11c8738702"
 
-[[r2_buckets]]
-binding = "BAPTISM_PHOTOS"
-bucket_name = "emma-photos"
+# Foto-Speicher läuft auf dem Synology NAS via Cloudflare Tunnel.
+# Folgende Umgebungsvariablen in Cloudflare Pages → Settings → Environment Variables setzen:
+#   NAS_WEBDAV_URL     = https://fotos.meineseite.de   (Cloudflare Tunnel URL)
+#   NAS_PHOTOS_FOLDER  = emma-photos                   (Name des geteilten Ordners auf dem NAS)
+#   NAS_WEBDAV_USER    = <WebDAV-Benutzername>
+#   NAS_WEBDAV_PASS    = <WebDAV-Passwort>             (als Secret setzen!)
+
