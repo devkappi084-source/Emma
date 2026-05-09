@@ -2,10 +2,6 @@
    gallery.js — Fotogalerie mit Lightbox
    ===================================================== */
 
-document.addEventListener("DOMContentLoaded", () => {
-  initGallery();
-});
-
 let currentIndex = 0;
 let photos = [];
 

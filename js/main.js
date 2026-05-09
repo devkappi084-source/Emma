@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   initCountdown();
   initFadeIn();
   initRsvp();
+  initGallery();
 });
 
 /* ---------- Config-Overrides aus KV laden ---------- */
@@ -30,9 +31,14 @@ async function loadConfigOverrides() {
       }
     });
 
-    // Galerie-Status
-    if (overrides.gallery && typeof overrides.gallery.active === "boolean") {
-      window.CONFIG.gallery.active = overrides.gallery.active;
+    // Galerie
+    if (overrides.gallery) {
+      if (typeof overrides.gallery.active === "boolean") {
+        window.CONFIG.gallery.active = overrides.gallery.active;
+      }
+      if (Array.isArray(overrides.gallery.photos) && overrides.gallery.photos.length > 0) {
+        window.CONFIG.gallery.photos = overrides.gallery.photos;
+      }
     }
   } catch { /* Lokal oder KV nicht verfügbar — stillschweigend ignorieren */ }
 }
