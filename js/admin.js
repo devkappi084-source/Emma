@@ -30,6 +30,10 @@ document.addEventListener("DOMContentLoaded", () => {
   // Polls
   document.getElementById("btnRefreshPolls").addEventListener("click", loadPolls);
 
+  // Photos
+  document.getElementById("btnRefreshPhotos").addEventListener("click", loadPhotos);
+  initUploadZone();
+
   // Settings
   document.getElementById("btnSaveSettings").addEventListener("click", saveSettings);
   document.getElementById("btnResetSettings").addEventListener("click", resetSettings);
@@ -73,6 +77,7 @@ function showDashboard() {
   document.getElementById("dashboard").hidden = false;
   loadRsvps();
   loadPolls();
+  loadPhotos();
   loadSettings();
 }
 
@@ -312,6 +317,138 @@ async function resetPoll(pollId, question) {
   };
 }
 
+/* ── Photos: Upload-Zone ─────────────────────────────────────────── */
+function initUploadZone() {
+  const zone  = document.getElementById("uploadZone");
+  const input = document.getElementById("photoInput");
+
+  input.addEventListener("change", () => {
+    if (input.files.length) uploadPhotos(Array.from(input.files));
+    input.value = "";
+  });
+
+  zone.addEventListener("dragover", e => {
+    e.preventDefault();
+    zone.classList.add("drag-over");
+  });
+  zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+  zone.addEventListener("drop", e => {
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+    const files = Array.from(e.dataTransfer.files).filter(f => f.type.startsWith("image/"));
+    if (files.length) uploadPhotos(files);
+  });
+}
+
+async function uploadPhotos(files) {
+  const progressEl   = document.getElementById("uploadProgress");
+  const progressText = document.getElementById("progressText");
+  const progressFill = document.getElementById("progressFill");
+
+  progressEl.hidden = false;
+  let uploaded = 0;
+  let errors   = 0;
+
+  for (let i = 0; i < files.length; i++) {
+    const file = files[i];
+    progressText.textContent = `Lädt hoch ${i + 1} von ${files.length}: ${file.name}`;
+    progressFill.style.width = `${(i / files.length) * 100}%`;
+
+    const form = new FormData();
+    form.append("photo",   file);
+    form.append("caption", "");
+
+    try {
+      const res = await fetch(`/api/photos?key=${encodeURIComponent(adminKey)}`, {
+        method: "POST",
+        body:   form,
+      });
+      const data = await res.json();
+      if (res.ok) { uploaded++; }
+      else        { errors++; showToast(`Fehler: ${data.error || file.name}`); }
+    } catch {
+      errors++;
+    }
+  }
+
+  progressFill.style.width = "100%";
+  progressText.textContent = `${uploaded} Foto${uploaded !== 1 ? "s" : ""} hochgeladen${errors ? `, ${errors} Fehler` : ""}.`;
+  setTimeout(() => { progressEl.hidden = true; progressFill.style.width = "0%"; }, 2000);
+
+  if (uploaded > 0) showToast(`${uploaded} Foto${uploaded !== 1 ? "s" : ""} hochgeladen.`);
+  loadPhotos();
+}
+
+/* ── Photos: laden & anzeigen ────────────────────────────────────── */
+async function loadPhotos() {
+  const grid = document.getElementById("photosGrid");
+  grid.innerHTML = '<p class="loading">Wird geladen…</p>';
+  document.getElementById("photosEmpty").hidden = true;
+
+  const res    = await api("config");
+  const config = res.ok ? await res.json() : {};
+  const photos = config.gallery?.photos || [];
+
+  renderPhotosGrid(photos);
+}
+
+function renderPhotosGrid(photos) {
+  const grid  = document.getElementById("photosGrid");
+  const empty = document.getElementById("photosEmpty");
+
+  if (!photos.length) {
+    grid.innerHTML  = "";
+    empty.hidden    = false;
+    return;
+  }
+  empty.hidden = true;
+
+  grid.innerHTML = photos.map(p => {
+    const fn = esc(p.filename || "");
+    return `
+      <div class="photo-card" data-filename="${fn}">
+        <div class="photo-thumb">
+          <img src="${esc(p.src)}" alt="${esc(p.caption || "")}" loading="lazy">
+          <button class="photo-delete-btn" onclick="confirmDeletePhoto('${fn}')" title="Foto löschen">✕</button>
+        </div>
+        <input class="photo-caption-input" type="text" value="${esc(p.caption || "")}"
+               placeholder="Beschriftung (optional)"
+               data-filename="${fn}"
+               onblur="saveCaption(this)">
+      </div>`;
+  }).join("");
+}
+
+/* ── Photos: Beschriftung speichern ──────────────────────────────── */
+async function saveCaption(input) {
+  const filename = input.dataset.filename;
+  const caption  = input.value.trim();
+  if (!filename) return;
+
+  const res = await fetch(
+    `/api/photos?key=${encodeURIComponent(adminKey)}&file=${encodeURIComponent(filename)}`,
+    { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ caption }) }
+  );
+  if (res.ok) showToast("Beschriftung gespeichert.");
+  else        showToast("Fehler beim Speichern der Beschriftung.");
+}
+
+/* ── Photos: löschen ─────────────────────────────────────────────── */
+function confirmDeletePhoto(filename) {
+  document.getElementById("confirmMsg").textContent =
+    "Foto wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+  document.getElementById("confirmModal").hidden = false;
+  document.getElementById("confirmYes").onclick = async () => {
+    closeConfirmModal();
+    const res = await fetch(
+      `/api/photos?key=${encodeURIComponent(adminKey)}&file=${encodeURIComponent(filename)}`,
+      { method: "DELETE" }
+    );
+    if (res.ok) { showToast("Foto gelöscht."); loadPhotos(); }
+    else          showToast("Fehler beim Löschen.");
+  };
+}
+
 /* ── Settings: laden ────────────────────────────────────────────── */
 async function loadSettings() {
   const res = await api("config");
@@ -336,6 +473,10 @@ async function loadSettings() {
 }
 
 async function saveSettings() {
+  // Aktuelle Fotos-Liste lesen und erhalten
+  const currentRes = await api("config");
+  const current    = currentRes.ok ? await currentRes.json() : {};
+
   const overrides = {
     babyName:     gVal("s-babyName"),
     eventDate:    gVal("s-eventDate"),
@@ -359,6 +500,7 @@ async function saveSettings() {
     },
     gallery: {
       active: document.getElementById("s-galleryActive").checked,
+      photos: current.gallery?.photos || [],
     },
   };
 
@@ -369,13 +511,17 @@ async function saveSettings() {
 
 async function resetSettings() {
   document.getElementById("confirmMsg").textContent =
-    "Alle gespeicherten Overrides löschen? Die Seite zeigt dann wieder die Werte aus config.js.";
+    "Alle Einstellungen zurücksetzen? Hochgeladene Fotos bleiben erhalten.";
   document.getElementById("confirmModal").hidden = false;
   document.getElementById("confirmYes").onclick = async () => {
     closeConfirmModal();
-    const res = await api("config", "PUT", {});
-    if (res.ok) { showToast("Overrides gelöscht."); loadSettings(); }
-    else          showToast("Fehler beim Löschen.");
+    // Fotos beim Zurücksetzen erhalten
+    const currentRes = await api("config");
+    const current    = currentRes.ok ? await currentRes.json() : {};
+    const preserved  = { gallery: { photos: current.gallery?.photos || [] } };
+    const res = await api("config", "PUT", preserved);
+    if (res.ok) { showToast("Einstellungen zurückgesetzt."); loadSettings(); }
+    else          showToast("Fehler beim Zurücksetzen.");
   };
 }
 

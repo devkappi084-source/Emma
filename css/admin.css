@@ -570,6 +570,141 @@ legend {
 }
 .toast.show { transform: translateX(-50%) translateY(0); }
 
+/* ── Foto-Upload-Zone ──────────────────────────────────────────── */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--white);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s, background .2s;
+  margin-bottom: 1.5rem;
+}
+.upload-zone:hover,
+.upload-zone.drag-over {
+  border-color: var(--gold);
+  background: #FDF6EC;
+}
+.upload-zone-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+.upload-zone-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+.upload-link {
+  color: var(--gold-dark);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.upload-zone-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── Upload-Fortschritt ────────────────────────────────────────── */
+.upload-progress {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow);
+}
+.progress-bar-wrap {
+  background: var(--border);
+  border-radius: 50px;
+  height: 8px;
+  overflow: hidden;
+  margin-bottom: 0.6rem;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold));
+  border-radius: 50px;
+  transition: width .3s ease;
+  width: 0%;
+}
+.progress-text {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* ── Foto-Raster ───────────────────────────────────────────────── */
+.photos-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem;
+  font-size: 0.9rem;
+}
+.photos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 1rem;
+}
+.photo-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+.photo-thumb {
+  position: relative;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--bg);
+}
+.photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform .25s;
+}
+.photo-card:hover .photo-thumb img { transform: scale(1.04); }
+.photo-delete-btn {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 26px;
+  height: 26px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .15s;
+  cursor: pointer;
+  padding: 0;
+}
+.photo-card:hover .photo-delete-btn,
+.photo-delete-btn:focus { opacity: 1; }
+.photo-delete-btn:hover { background: var(--red); }
+.photo-caption-input {
+  width: 100%;
+  padding: 0.5rem 0.65rem;
+  border: none;
+  border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+  font-family: inherit;
+}
+.photo-caption-input:focus {
+  background: #FDF6EC;
+  border-top-color: var(--gold);
+}
+.photo-caption-input::placeholder { color: var(--text-muted); }
+
 /* ── Responsive ────────────────────────────────────────────────── */
 @media (max-width: 700px) {
   .field-row { grid-template-columns: 1fr; }
@@ -579,4 +714,5 @@ legend {
   .toolbar-actions .btn-primary,
   .toolbar-actions .btn-secondary { flex: 1; text-align: center; }
   .polls-admin-grid { grid-template-columns: 1fr; }
+  .photos-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 }

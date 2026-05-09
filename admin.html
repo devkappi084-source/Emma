@@ -43,6 +43,7 @@
     <nav class="adm-tabs" role="tablist">
       <button class="tab active" data-tab="rsvp"     role="tab">Anmeldungen</button>
       <button class="tab"        data-tab="polls"    role="tab">Abstimmungen</button>
+      <button class="tab"        data-tab="photos"   role="tab">Fotos</button>
       <button class="tab"        data-tab="settings" role="tab">Einstellungen</button>
     </nav>
 
@@ -90,6 +91,34 @@
           <button class="btn-secondary" id="btnRefreshPolls">↻ Aktualisieren</button>
         </div>
         <div id="pollsContainer" class="polls-admin-grid"></div>
+      </section>
+
+      <!-- ── Tab: Fotos ───────────────────────────────────────── -->
+      <section id="tab-photos" class="tab-panel" hidden>
+        <div class="panel-toolbar">
+          <h2>Fotos</h2>
+          <button class="btn-secondary" id="btnRefreshPhotos">↻ Aktualisieren</button>
+        </div>
+
+        <!-- Upload-Zone -->
+        <div class="upload-zone" id="uploadZone">
+          <div class="upload-zone-icon">📷</div>
+          <p class="upload-zone-text">Fotos hierher ziehen oder <label for="photoInput" class="upload-link">auswählen</label></p>
+          <p class="upload-zone-hint">JPEG, PNG, WebP · max. 20 MB pro Foto · Mehrfachauswahl möglich</p>
+          <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple hidden>
+        </div>
+
+        <!-- Fortschrittsanzeige -->
+        <div id="uploadProgress" class="upload-progress" hidden>
+          <div class="progress-bar-wrap">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+          <p id="progressText" class="progress-text">Wird hochgeladen…</p>
+        </div>
+
+        <!-- Foto-Raster -->
+        <p id="photosEmpty" class="photos-empty" hidden>Noch keine Fotos hochgeladen.</p>
+        <div class="photos-grid" id="photosGrid"></div>
       </section>
 
       <!-- ── Tab: Einstellungen ────────────────────────────────── -->
@@ -192,7 +221,7 @@
               <input id="s-galleryActive" name="galleryActive" type="checkbox">
               <span class="toggle-text">Galerie aktivieren (Fotos anzeigen)</span>
             </label>
-            <p class="field-hint">Erst aktivieren, nachdem Fotos in <code>images/gallery/</code> hochgeladen und in <code>js/config.js</code> eingetragen wurden.</p>
+            <p class="field-hint">Fotos können im Tab <strong>Fotos</strong> hochgeladen werden. Erst aktivieren, wenn Fotos vorhanden sind.</p>
           </fieldset>
 
         </form>
