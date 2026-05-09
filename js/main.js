@@ -168,7 +168,6 @@ function initRsvp() {
       name:       form.elements["name"].value.trim(),
       attendance: form.elements["attendance"].value,
       guests:     form.elements["guests"]?.value || "1",
-      menu:       form.elements["menu"]?.value || "",
       allergies:  form.elements["allergies"]?.value.trim() || "",
       message:    form.elements["message"]?.value.trim() || "",
       timestamp:  new Date().toISOString(),

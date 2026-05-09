@@ -42,7 +42,6 @@
 
     <nav class="adm-tabs" role="tablist">
       <button class="tab active" data-tab="rsvp"     role="tab">Anmeldungen</button>
-      <button class="tab"        data-tab="polls"    role="tab">Abstimmungen</button>
       <button class="tab"        data-tab="photos"   role="tab">Fotos</button>
       <button class="tab"        data-tab="settings" role="tab">Einstellungen</button>
     </nav>
@@ -70,7 +69,6 @@
                 <th>Name</th>
                 <th>Teilnahme</th>
                 <th>Personen</th>
-                <th>Menü</th>
                 <th>Allergien</th>
                 <th>Nachricht</th>
                 <th>Datum</th>
@@ -78,19 +76,10 @@
               </tr>
             </thead>
             <tbody id="rsvpBody">
-              <tr><td colspan="8" class="loading">Wird geladen…</td></tr>
+              <tr><td colspan="7" class="loading">Wird geladen…</td></tr>
             </tbody>
           </table>
         </div>
-      </section>
-
-      <!-- ── Tab: Abstimmungen ─────────────────────────────────── -->
-      <section id="tab-polls" class="tab-panel" hidden>
-        <div class="panel-toolbar">
-          <h2>Abstimmungen</h2>
-          <button class="btn-secondary" id="btnRefreshPolls">↻ Aktualisieren</button>
-        </div>
-        <div id="pollsContainer" class="polls-admin-grid"></div>
       </section>
 
       <!-- ── Tab: Fotos ───────────────────────────────────────── -->
@@ -106,7 +95,7 @@
         <!-- Upload-Zone -->
         <div class="upload-zone" id="uploadZone">
           <div class="upload-zone-icon">📷</div>
-          <p class="upload-zone-text">Fotos hierher ziehen oder <label for="photoInput" class="upload-link">auswählen</label></p>
+          <p class="upload-zone-text">Fotos hierher ziehen oder <span class="upload-link">auswählen</span></p>
           <p class="upload-zone-hint">JPEG, PNG, WebP · max. 20 MB pro Foto · Mehrfachauswahl möglich</p>
           <input id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/avif" multiple hidden>
         </div>
@@ -272,15 +261,6 @@
               <option value="3">3</option>
               <option value="4">4</option>
               <option value="5+">5+</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="edit-menu">Menü</label>
-            <select id="edit-menu" name="menu">
-              <option value="">—</option>
-              <option value="Fleisch">Fleisch</option>
-              <option value="Fisch">Fisch</option>
-              <option value="Vegetarisch">Vegetarisch</option>
             </select>
           </div>
         </div>
