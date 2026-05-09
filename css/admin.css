@@ -586,6 +586,7 @@ legend {
   border-color: var(--gold);
   background: #FDF6EC;
 }
+.upload-zone > *:not(input) { pointer-events: none; }
 .upload-zone-icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
 .upload-zone-text {
   font-size: 0.95rem;

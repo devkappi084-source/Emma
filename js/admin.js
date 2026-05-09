@@ -27,9 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("btnRefreshRsvp").addEventListener("click", loadRsvps);
   document.getElementById("btnExportCsv").addEventListener("click", exportCsv);
 
-  // Polls
-  document.getElementById("btnRefreshPolls").addEventListener("click", loadPolls);
-
   // Photos
   document.getElementById("btnRefreshPhotos").addEventListener("click", loadPhotos);
   document.getElementById("btnScanNas").addEventListener("click", scanNas);
@@ -77,7 +74,6 @@ function showDashboard() {
   document.getElementById("loginScreen").hidden = true;
   document.getElementById("dashboard").hidden = false;
   loadRsvps();
-  loadPolls();
   loadPhotos();
   loadSettings();
 }
@@ -108,19 +104,11 @@ async function loadRsvps() {
 
 function renderSummary(s) {
   const el = document.getElementById("rsvpSummary");
-  const menuList = Object.entries(s.menus || {})
-    .map(([k, v]) => `${k}: ${v}`)
-    .join(" · ") || "—";
-
   el.innerHTML = `
     ${card("Gesamt", s.total, "")}
     ${card("Zusagen", s.yes, "yes")}
     ${card("Absagen", s.no, "no")}
     ${card("Gäste", s.totalGuests, "gold")}
-    <div class="summary-card">
-      <div class="summary-card-label">Menüwahl</div>
-      <div style="font-size:.9rem;margin-top:.4rem;color:var(--text)">${menuList}</div>
-    </div>
   `;
 }
 const card = (label, val, cls) =>
@@ -132,7 +120,7 @@ const card = (label, val, cls) =>
 function renderRsvpTable(entries) {
   const body = document.getElementById("rsvpBody");
   if (!entries.length) {
-    body.innerHTML = '<tr><td colspan="8" class="loading">Noch keine Anmeldungen.</td></tr>';
+    body.innerHTML = '<tr><td colspan="7" class="loading">Noch keine Anmeldungen.</td></tr>';
     return;
   }
   body.innerHTML = entries.map(e => `
@@ -140,7 +128,6 @@ function renderRsvpTable(entries) {
       <td><strong>${esc(e.name)}</strong>${e.email ? `<br><span style="font-size:.8rem;color:var(--text-muted)">${esc(e.email)}</span>` : ""}</td>
       <td><span class="badge badge-${e.attendance === "yes" ? "yes" : "no"}">${e.attendance === "yes" ? "Ja ✓" : "Nein ✗"}</span></td>
       <td>${esc(e.guests || "1")}</td>
-      <td>${esc(e.menu || "—")}</td>
       <td class="cell-truncate" title="${esc(e.allergies || "")}">${esc(e.allergies || "—")}</td>
       <td class="cell-truncate" title="${esc(e.message || "")}">${esc(e.message || "—")}</td>
       <td style="white-space:nowrap;font-size:.8rem;color:var(--text-muted)">${fmtDate(e.timestamp)}</td>
@@ -162,7 +149,6 @@ function openEditModal(id) {
   document.getElementById("edit-email").value      = entry.email || "";
   document.getElementById("edit-attendance").value = entry.attendance || "yes";
   document.getElementById("edit-guests").value     = entry.guests || "1";
-  document.getElementById("edit-menu").value       = entry.menu || "";
   document.getElementById("edit-allergies").value  = entry.allergies || "";
   document.getElementById("edit-message").value    = entry.message || "";
 
@@ -181,7 +167,6 @@ async function handleEditSave(e) {
     email:      document.getElementById("edit-email").value,
     attendance: document.getElementById("edit-attendance").value,
     guests:     document.getElementById("edit-guests").value,
-    menu:       document.getElementById("edit-menu").value,
     allergies:  document.getElementById("edit-allergies").value,
     message:    document.getElementById("edit-message").value,
   };
@@ -228,10 +213,10 @@ async function doDelete() {
 function exportCsv() {
   if (!rsvpData.length) { showToast("Keine Daten zum Exportieren."); return; }
 
-  const headers = ["Name", "E-Mail", "Teilnahme", "Personen", "Menü", "Allergien", "Nachricht", "Datum"];
+  const headers = ["Name", "E-Mail", "Teilnahme", "Personen", "Allergien", "Nachricht", "Datum"];
   const rows = rsvpData.map(e => [
     e.name, e.email, e.attendance === "yes" ? "Ja" : "Nein",
-    e.guests, e.menu, e.allergies, e.message, fmtDate(e.timestamp),
+    e.guests, e.allergies, e.message, fmtDate(e.timestamp),
   ].map(csvCell).join(";"));
 
   const csv     = [headers.join(";"), ...rows].join("\n");
@@ -249,90 +234,28 @@ function exportCsv() {
 
 const csvCell = v => `"${String(v || "").replace(/"/g, '""')}"`;
 
-/* ── Polls: laden ──────────────────────────────────────────────── */
-async function loadPolls() {
-  const container = document.getElementById("pollsContainer");
-  container.innerHTML = '<p class="loading">Wird geladen…</p>';
-
-  const res  = await api("polls");
-  if (!res.ok) { container.innerHTML = "<p>Fehler beim Laden.</p>"; return; }
-  const data = await res.json();
-  const kvResults = data.results || {};
-
-  const polls = (typeof CONFIG !== "undefined" && CONFIG.polls) ? CONFIG.polls : [];
-  if (!polls.length) { container.innerHTML = "<p>Keine Umfragen in config.js definiert.</p>"; return; }
-
-  container.innerHTML = "";
-  polls.forEach(poll => {
-    const r      = kvResults[poll.id] || { counts: {}, total: 0 };
-    container.appendChild(buildPollCard(poll, r));
-  });
-}
-
-function buildPollCard(poll, results) {
-  const total  = results.total || 0;
-  const counts = results.counts || {};
-  let   maxV   = Math.max(0, ...Object.values(counts));
-
-  const optHtml = poll.options.map(opt => {
-    const v   = counts[opt.label] || 0;
-    const pct = total > 0 ? Math.round((v / total) * 100) : 0;
-    const isWinner = v === maxV && v > 0;
-    return `
-      <div class="poll-admin-option" ${isWinner ? 'style="background:var(--blue-light);border-radius:6px"' : ""}>
-        <span>${opt.emoji}</span>
-        <span>${esc(opt.label)}</span>
-        <div class="poll-bar-wrap"><div class="poll-bar-fill" style="width:${pct}%"></div></div>
-        <span class="poll-pct">${v} <span style="color:var(--border);font-weight:400">(${pct}%)</span></span>
-      </div>`;
-  }).join("");
-
-  const card = document.createElement("div");
-  card.className = "poll-admin-card";
-  card.innerHTML = `
-    <div class="poll-admin-header">
-      <h3 class="poll-admin-question">${esc(poll.question)}</h3>
-    </div>
-    ${optHtml}
-    <div class="poll-admin-footer">
-      <span>${total} Stimme${total !== 1 ? "n" : ""} insgesamt</span>
-      <button class="btn-danger" onclick="resetPoll('${esc(poll.id)}', '${esc(poll.question)}')">
-        Zurücksetzen
-      </button>
-    </div>
-  `;
-  return card;
-}
-
-/* ── Poll: zurücksetzen ─────────────────────────────────────────── */
-async function resetPoll(pollId, question) {
-  pendingDeleteId = null;
-  document.getElementById("confirmMsg").textContent =
-    `Alle Stimmen für „${question}" wirklich löschen?`;
-  document.getElementById("confirmModal").hidden = false;
-  document.getElementById("confirmYes").onclick = async () => {
-    closeConfirmModal();
-    const res = await api(`poll&pollId=${encodeURIComponent(pollId)}`, "DELETE");
-    if (res.ok) { showToast("Abstimmung zurückgesetzt."); loadPolls(); }
-    else          showToast("Fehler beim Zurücksetzen.");
-  };
-}
-
 /* ── Photos: Upload-Zone ─────────────────────────────────────────── */
 function initUploadZone() {
   const zone  = document.getElementById("uploadZone");
   const input = document.getElementById("photoInput");
+
+  zone.addEventListener("click", () => input.click());
 
   input.addEventListener("change", () => {
     if (input.files.length) uploadPhotos(Array.from(input.files));
     input.value = "";
   });
 
-  zone.addEventListener("dragover", e => {
+  zone.addEventListener("dragenter", e => {
     e.preventDefault();
     zone.classList.add("drag-over");
   });
-  zone.addEventListener("dragleave", () => zone.classList.remove("drag-over"));
+  zone.addEventListener("dragover", e => {
+    e.preventDefault();
+  });
+  zone.addEventListener("dragleave", e => {
+    if (!zone.contains(e.relatedTarget)) zone.classList.remove("drag-over");
+  });
   zone.addEventListener("drop", e => {
     e.preventDefault();
     zone.classList.remove("drag-over");
