@@ -75,6 +75,7 @@ async function servePhoto(env, filename) {
 
   const nasRes = await fetch(nasFileUrl(env, filename), {
     headers: { Authorization: basicAuth(env) },
+    signal:  AbortSignal.timeout(10_000),
   });
 
   if (!nasRes.ok) return new Response("Not found", { status: 404 });
@@ -185,7 +186,8 @@ async function scanNas(env) {
         Depth:          "1",
         "Content-Type": "application/xml; charset=utf-8",
       },
-      body: `<?xml version="1.0" encoding="utf-8"?><D:propfind xmlns:D="DAV:"><D:prop><D:displayname/><D:resourcetype/></D:prop></D:propfind>`,
+      body:   `<?xml version="1.0" encoding="utf-8"?><D:propfind xmlns:D="DAV:"><D:prop><D:displayname/><D:resourcetype/></D:prop></D:propfind>`,
+      signal: AbortSignal.timeout(10_000),
     });
   } catch (e) {
     return json({ error: `NAS nicht erreichbar: ${e.message}` }, 502);
