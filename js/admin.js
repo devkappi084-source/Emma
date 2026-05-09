@@ -379,16 +379,22 @@ async function scanNas() {
   btn.disabled = true;
   btn.textContent = "⟳ Scanne…";
 
-  const res = await fetch(
-    `/api/photos?key=${encodeURIComponent(adminKey)}&action=scan`
-  );
-  const data = await res.json().catch(() => ({}));
+  let res, data;
+  try {
+    res  = await fetch(`/api/photos?key=${encodeURIComponent(adminKey)}&action=scan`);
+    data = await res.json().catch(() => ({}));
+  } catch (e) {
+    btn.disabled    = false;
+    btn.textContent = "⟳ NAS scannen";
+    showToast(`NAS-Scan fehlgeschlagen: ${e.message}`);
+    return;
+  }
 
   btn.disabled    = false;
   btn.textContent = "⟳ NAS scannen";
 
   if (!res.ok) {
-    showToast(data.error || "NAS-Scan fehlgeschlagen.");
+    showToast(data.error || `NAS-Scan fehlgeschlagen (HTTP ${res.status}).`);
     return;
   }
 
