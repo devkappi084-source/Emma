@@ -10,5 +10,11 @@
   },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "BAPTISM_KV",
+      "id": "09420f5948574cafbf125c11c8738702"
+    }
   ]
 }
