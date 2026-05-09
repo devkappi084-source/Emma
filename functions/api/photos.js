@@ -32,6 +32,16 @@ export async function onRequest(context) {
     return new Response(null, { headers: CORS });
   }
 
+  try {
+    return await handleRequest(context);
+  } catch (e) {
+    return json({ error: `Interner Fehler: ${e.message}` }, 500);
+  }
+}
+
+async function handleRequest(context) {
+  const { request, env } = context;
+
   const url      = new URL(request.url);
   const filename = url.searchParams.get("file");
   const action   = url.searchParams.get("action");
