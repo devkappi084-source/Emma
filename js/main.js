@@ -83,7 +83,7 @@ function setAttr(id, attr, val) {
 
 function formatDate(isoStr) {
   const d = new Date(isoStr);
-  return d.toLocaleDateString("de-DE", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  return d.toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" });
 }
 
 /* ---------- Navbar ---------- */
@@ -174,7 +174,6 @@ function initRsvp() {
       name:       form.elements["name"].value.trim(),
       attendance: form.elements["attendance"].value,
       guests:     form.elements["guests"]?.value || "1",
-      allergies:  form.elements["allergies"]?.value.trim() || "",
       message:    form.elements["message"]?.value.trim() || "",
       timestamp:  new Date().toISOString(),
     };
