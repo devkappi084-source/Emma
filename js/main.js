@@ -83,7 +83,7 @@ function setAttr(id, attr, val) {
 
 function formatDate(isoStr) {
   const d = new Date(isoStr);
-  return d.toLocaleDateString("de-DE", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+  return d.toLocaleDateString("de-DE", { year: "numeric", month: "long", day: "numeric" });
 }
 
 /* ---------- Navbar ---------- */
